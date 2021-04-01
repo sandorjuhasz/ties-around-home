@@ -25,7 +25,7 @@ regdf <- subset(regdf, tract_home != "")
 regdf$log_income <- log10(regdf$income)
 regdf$log_population <- log10(regdf$population)
 regdf$BA_share <- regdf$education_bachelor / regdf$population
-
+regdf$log_degree <- log(regdf$degree)
 
 
 ### models
@@ -52,6 +52,7 @@ stargazer(d1, d2, d3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
 
 # clustering -- closed triads in 10/5/1 km
 #c1 <- lm(clust10000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
+#c1 <- lm(clust10000 ~ log_degree + log_income + log_population + as.factor(cbsacode), data = regdf)
 c1 <- lm(clust10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
 summary(c1)
 
