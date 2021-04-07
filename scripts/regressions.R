@@ -127,6 +127,46 @@ summary(p3)
 p4 <- glm(poor ~ dcum10000_share  + clust10000 + support10000 + BA_share + log_population + as.factor(cbsacode), family=binomial(link='logit'), data = regdf)
 summary(p4)
 
+
+# in 10 km -- main text
+
+m1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m1)
+
+m2 <- lm(clust10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m2)
+
+m3 <- lm(support10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m3)
+
+
+stargazer(m1, m2, m3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
+          font.size = "small",
+          align = TRUE,
+          omit.stat=c("f", "ser"),
+          column.sep.width = "10pt")
+
+
+# in 5 km -- main text
+
+m1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m1)
+
+m2 <- lm(clust10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m2)
+
+m3 <- lm(support10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+summary(m3)
+
+
+stargazer(m1, m2, m3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
+          font.size = "small",
+          align = TRUE,
+          omit.stat=c("f", "ser"),
+          column.sep.width = "10pt")
+
+
+
 ###
 
 
