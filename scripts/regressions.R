@@ -191,15 +191,18 @@ ise_supp <- c()
 # loop over models and store log_income coeffs
 for (c in 1:length(cbsalist)){
   model_df <- subset(regdf, cbsacode==cbsalist[c])
-  md <- summary(lm(dcum10000_share ~ log_income + log_population, data = model_df))
+  #md <- summary(lm(dcum10000_share ~ log_income + log_population, data = model_df))
+  md <- summary(lm(dcum10000_share ~ poor + log_population, data = model_df))
   icoeff_deg[c] <- (data.frame(md$coefficients)[2,1])
   ise_deg[c] <- (data.frame(md$coefficients)[2,2])
   
-  mc <- summary(lm(clust10000 ~ log_income + log_population, data = model_df))
+  #mc <- summary(lm(clust10000 ~ log_income + log_population, data = model_df))
+  mc <- summary(lm(clust10000 ~ poor + log_population, data = model_df))
   icoeff_clust[c] <- (data.frame(mc$coefficients)[2,1])
   ise_clust[c] <- (data.frame(mc$coefficients)[2,2])
   
-  ms <- summary(lm(support10000 ~ log_income + log_population, data = model_df))
+  #ms <- summary(lm(support10000 ~ log_income + log_population, data = model_df))
+  ms <- summary(lm(support10000 ~ poor + log_population, data = model_df))
   icoeff_supp[c] <- (data.frame(ms$coefficients)[2,1])
   ise_supp[c] <- (data.frame(mc$coefficients)[2,2])
 }
@@ -207,6 +210,10 @@ for (c in 1:length(cbsalist)){
 # final df
 coeff_df <- data.table(cbsalist, icoeff_deg, ise_deg, icoeff_clust, ise_clust, icoeff_supp, ise_supp)
 
+# add color col
+coeff_df$col_deg <- ifelse(coeff_df$icoeff_deg>0, "grey", "darkblue")
+coeff_df$col_clust <- ifelse(coeff_df$icoeff_clust>0, "grey", "darkblue")
+coeff_df$col_supp <- ifelse(coeff_df$icoeff_supp>0, "grey", "darkblue")
 
 # save df
 write.table(coeff_df, file="../data/coeff_df.csv", row.names=FALSE, col.names=TRUE, sep=";")
@@ -214,3 +221,5 @@ write.table(coeff_df, file="../data/coeff_df.csv", row.names=FALSE, col.names=TR
 ###
 
 
+model_df <- subset(regdf, cbsacode==35620)
+md <- summary(lm(dcum10000_share ~ log_income + log_population, data = model_df))
