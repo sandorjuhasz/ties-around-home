@@ -171,3 +171,34 @@ stargazer(m1, m2, m3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
 
 
 
+### regression for each city to get the coeffs
+# construct regdf -- ABOVE
+
+# cbsacode for the loop and containers
+cbsalist <- unique(regdf$cbsacode)
+icoeff_deg <- c()
+icoeff_clust <- c()
+icoeff_supp <- c()
+
+# loop over models and store log_income coeffs
+for (c in 1:length(cbsalist)){
+  model_df <- subset(regdf, cbsacode==cbsalist[c])
+  md <- lm(dcum10000_share ~ log_income + log_population, data = model_df)
+  icoeff_deg[c] <- (data.frame(md$coefficients)[2,1])
+  
+  mc <- lm(clust10000 ~ log_income + log_population, data = model_df)
+  icoeff_clust[c] <- (data.frame(mc$coefficients)[2,1])
+  
+  ms <- lm(support10000 ~ log_income + log_population, data = model_df)
+  icoeff_supp[c] <- (data.frame(ms$coefficients)[2,1])
+}
+
+# final df
+coeff_df <- data.table(cbsalist, icoeff_deg, icoeff_clust, icoeff_supp)
+
+# save df
+write.table(coeff_df, file="../data/coeff_df.csv", row.names=FALSE, col.names=TRUE, sep=";")
+
+###
+
+
