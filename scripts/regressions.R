@@ -28,6 +28,8 @@ regdf$BA_share <- regdf$education_bachelor / regdf$population
 regdf$log_degree <- log(regdf$degree)
 
 
+
+
 ### models
 # degree -- cummulative degree share in 10/5/1 km
 #d1 <- lm(dcum10000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
@@ -176,25 +178,35 @@ stargazer(m1, m2, m3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
 
 # cbsacode for the loop and containers
 cbsalist <- unique(regdf$cbsacode)
+
 icoeff_deg <- c()
 icoeff_clust <- c()
 icoeff_supp <- c()
 
+ise_deg <- c()
+ise_clust <- c()
+ise_supp <- c()
+
+
 # loop over models and store log_income coeffs
 for (c in 1:length(cbsalist)){
   model_df <- subset(regdf, cbsacode==cbsalist[c])
-  md <- lm(dcum10000_share ~ log_income + log_population, data = model_df)
+  md <- summary(lm(dcum10000_share ~ log_income + log_population, data = model_df))
   icoeff_deg[c] <- (data.frame(md$coefficients)[2,1])
+  ise_deg[c] <- (data.frame(md$coefficients)[2,2])
   
-  mc <- lm(clust10000 ~ log_income + log_population, data = model_df)
+  mc <- summary(lm(clust10000 ~ log_income + log_population, data = model_df))
   icoeff_clust[c] <- (data.frame(mc$coefficients)[2,1])
+  ise_clust[c] <- (data.frame(mc$coefficients)[2,2])
   
-  ms <- lm(support10000 ~ log_income + log_population, data = model_df)
+  ms <- summary(lm(support10000 ~ log_income + log_population, data = model_df))
   icoeff_supp[c] <- (data.frame(ms$coefficients)[2,1])
+  ise_supp[c] <- (data.frame(mc$coefficients)[2,2])
 }
 
 # final df
-coeff_df <- data.table(cbsalist, icoeff_deg, icoeff_clust, icoeff_supp)
+coeff_df <- data.table(cbsalist, icoeff_deg, ise_deg, icoeff_clust, ise_clust, icoeff_supp, ise_supp)
+
 
 # save df
 write.table(coeff_df, file="../data/coeff_df.csv", row.names=FALSE, col.names=TRUE, sep=";")
