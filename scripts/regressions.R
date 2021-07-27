@@ -1,5 +1,7 @@
 ### regressions ties-around-home paper ###
 
+setwd("C:\\ANET//home_work_twitter_ties")
+
 # packages
 library(dplyr)
 library(data.table)
@@ -7,10 +9,10 @@ library(stargazer)
 
 
 # import data
-degree_tab <- fread("../data/degree_tab_top50.csv.gz")
-clust_tab <- fread("../data/clust_tab_top50.csv.gz")
-support_tab <- fread("../data/supp_tab_top50.csv.gz")
-censusdata <-  fread("../data/census_for_regression.csv.gz")
+degree_tab <- fread("./data/degree_tab_top50.csv.gz")
+clust_tab <- fread("./data/clust_tab_top50.csv.gz")
+support_tab <- fread("./data/supp_tab_top50.csv.gz")
+censusdata <-  fread("./data/census_for_regression.csv.gz")
 
 
 # regression dataframe
@@ -28,11 +30,14 @@ regdf$BA_share <- regdf$education_bachelor / regdf$population
 regdf$log_degree <- log(regdf$degree)
 regdf$rich <- (regdf$poor-1)*(-1)
 
+select_ids <-  regdf %>% filter(dcum10000 >1) %>% select(user_id)
+
+regdf2 <- subset(regdf, user_id %in% unlist(select_ids),)
 
 ### models
 # degree -- cummulative degree share in 10/5/1 km
 #d1 <- lm(dcum10000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-d1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+d1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf2)
 summary(d1)
 
 #d2 <- lm(dcum5000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
