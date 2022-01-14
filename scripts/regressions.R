@@ -1,6 +1,6 @@
 ### regressions ties-around-home paper ###
 
-setwd("C:\\ANET//home_work_twitter_ties")
+rm(list = ls())
 
 # packages
 library(dplyr)
@@ -9,10 +9,10 @@ library(stargazer)
 
 
 # import data
-degree_tab <- fread("./data/degree_tab_top50.csv.gz")
-clust_tab <- fread("./data/clust_tab_top50.csv.gz")
-support_tab <- fread("./data/supp_tab_top50.csv.gz")
-censusdata <-  fread("./data/census_for_regression.csv.gz")
+degree_tab <- fread("../data/degree_tab_top50.csv.gz")
+clust_tab <- fread("../data/clust_tab_top50.csv.gz")
+support_tab <- fread("../data/supp_tab_top50.csv.gz")
+censusdata <-  fread("../data/census_for_regression.csv.gz")
 
 
 # regression dataframe
@@ -37,18 +37,21 @@ regdf2 <- subset(regdf, user_id %in% unlist(select_ids),)
 ### models
 # degree -- cummulative degree share in 10/5/1 km
 #d1 <- lm(dcum10000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-d1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf2)
+d1 <- lm(dcum10000_share ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(d1)
 
 #d2 <- lm(dcum5000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-d2 <- lm(dcum5000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+d2 <- lm(dcum5000_share ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(d2)
 
-#d3 <- lm(dcum1000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-d3 <- lm(dcum1000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+d3 <- lm(dcum3000_share ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(d3)
 
-stargazer(d1, d2, d3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
+#d3 <- lm(dcum1000_share ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
+d4 <- lm(dcum1000_share ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
+summary(d4)
+
+stargazer(d1, d2, d3, d4, omit = c("cbsacode"), omit.labels = ("Metro FE"),
           font.size = "small",
           align = TRUE,
           omit.stat=c("f", "ser"),
@@ -59,18 +62,21 @@ stargazer(d1, d2, d3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
 # clustering -- closed triads in 10/5/1 km
 #c1 <- lm(clust10000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
 #c1 <- lm(clust10000 ~ log_degree + log_income + log_population + as.factor(cbsacode), data = regdf)
-c1 <- lm(clust10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+c1 <- lm(clust10000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(c1)
 
 #c2 <- lm(clust5000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-c2 <- lm(clust5000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+c2 <- lm(clust5000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(c2)
 
-#c3 <- lm(clust1000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-c3 <- lm(clust1000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+c3 <- lm(clust3000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(c3)
 
-stargazer(c1, c2, c3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
+#c3 <- lm(clust1000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
+c4 <- lm(clust1000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
+summary(c4)
+
+stargazer(c1, c2, c3,c4, omit = c("cbsacode"), omit.labels = ("Metro FE"),
           font.size = "small",
           align = TRUE,
           omit.stat=c("f", "ser"),
@@ -80,18 +86,21 @@ stargazer(c1, c2, c3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
 
 # support -- supported ties in 10/5/1 km
 #s1 <- lm(support10000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-s1 <- lm(support10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+s1 <- lm(support10000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(s1)
 
 #s2 <- lm(support5000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-s2 <- lm(support5000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+s2 <- lm(support5000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(s2)
 
 #s3 <- lm(support1000 ~ log_income + BA_share + log_population + as.factor(cbsacode), data = regdf)
-s3 <- lm(support1000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+s3 <- lm(support3000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(s3)
 
-stargazer(s1, s2, s3, omit = c("cbsacode"), omit.labels = ("Metro FE"),
+s4 <- lm(support1000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
+summary(s4)
+
+stargazer(s1, s2, s3, s4, omit = c("cbsacode"), omit.labels = ("Metro FE"),
           font.size = "small",
           align = TRUE,
           omit.stat=c("f", "ser"),
@@ -136,13 +145,13 @@ summary(p4)
 
 # in 10 km -- main text
 
-m1 <- lm(dcum10000_share ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+m1 <- lm(dcum10000_share ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(m1)
 
-m2 <- lm(clust10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+m2 <- lm(clust10000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(m2)
 
-m3 <- lm(support10000 ~ log_income + log_population + as.factor(cbsacode), data = regdf)
+m3 <- lm(support10000 ~ log_income + log_population + degree + as.factor(cbsacode), data = regdf)
 summary(m3)
 
 
