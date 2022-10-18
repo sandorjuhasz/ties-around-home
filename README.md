@@ -2,7 +2,7 @@
 
 This repository contains data and code to reproduce the figures and results of the following research paper:
 
-Kovács, Á. J., Juhász, S., Bokányi, E., and Lengyel, B. (2021) Income-related spatial concentration of individual social capital in cities. Accepted for publication in *Environment and Planning B*
+Kovács, Á. J., Juhász, S., Bokányi, E., and Lengyel, B. (2021) Income-related spatial concentration of individual social capital in cities. *Environment and Planning B*, 1-15.
 
 [Abstract] <br/>
 *Social connections that span across diverse urban neighborhoods can support prosperity by mobilizing social capital. However, there is limited evidence on the spatial structure of individual social capital inside cities. This
